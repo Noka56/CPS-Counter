@@ -12,7 +12,10 @@ import time
 # Tkinter窗口初始化
 rt = Tk()
 rt.title('CPS Counter')
+rt.geometry('650x520+300+200')
+rt.resizable(0,0)
 
+#图片路径
 img_path = './IMG/'
 
 # PIL读取封面图片
@@ -36,16 +39,68 @@ com.grid(row=3, column=1, columnspan=3)  # 评价标签
 cvs = Canvas(width=215, height=22, bg='black')
 cvs.grid(row=3, column=0)  # 进度条
 
+#定义la_cng函数,用以切换语言
+def la_cng():
+    global en
+
+    if en:
+        txtcn(cps,'您的每秒点击鼠标次数:')
+        txtcn(lan_cng,'English')
+        if st:
+            txtcn(com, '评价在测试完后显示')
+            if txtcg:
+                txtcn(bt,'点击')
+                txtcn(cng,'测试已经开始')
+            else:
+                txtcn(bt,'开始')
+                txtcn(cng,'更改次数(若输入内容非纯数字或大于215或为1,则自动替换为215)')
+        else:
+            if 0 <= cs and 4 >= cs:
+                comment('树獭')
+            elif cs > 4 and cs <= 6:
+                comment('鸵鸟')
+            elif cs > 6 and cs <= 10:
+                comment('兔子')
+            elif cs > 10 and cs <= 12:
+                comment('猎豹')
+            else:
+                comment('鹰')
+        en = False
+    else:
+        txtcn(cps,'Your CPS:')
+        txtcn(lan_cng,'中文')
+        if st:
+            txtcn(com, 'Comment will be here')
+            if txtcg:
+                txtcn(bt,'Click!')
+                txtcn(cng,'Already Start')
+            else:
+                txtcn(bt,'Start')
+                txtcn(cng,'Change Clicking numbers(Must less than 215)')
+        else:
+            if 0 <= cs and 4 >= cs:
+                comment('TOO slow')
+            elif cs > 4 and cs <= 6:
+                comment('Slow')
+            elif cs > 6 and cs <= 10:
+                comment('Medium')
+            elif cs > 10 and cs <= 12:
+                comment('Fast')
+            else:
+                comment('VERY fast')
+        en = True
+
+#文字切换
+def txtcn(module,text):
+    module.configure(text=text)
+    module.text = text
+
 # 定义cag函数,用以更换点击次数
-
-
 def cag():
     et.grid(row=0, column=0, columnspan=4)
     cng.place(x=1919180, y=1919180)
 
 # 定义Counter函数,用以计时
-
-
 def counter():
     global time1, min1, h1
     time1 = time.localtime().tm_sec
@@ -53,21 +108,28 @@ def counter():
     h1 = time.localtime().tm_hour
 
 # 定义Comment函数,用以输出评论
-
-
 def comment(text):
     com.configure(text=text)
     com.text = text
+
+def lan_check(module,cn,eng):
+    global en
+
+    if en:
+        txtcn(module,eng)
+    else:
+        txtcn(module,cn)
 
 # 定义Change函数,用以
 # 1.切换图片
 # 2.计算CPS
 # 3.主控制
-
-
 def change():
     # 定义全局变量
-    global st, img_name, se, mi, add, e_num, cs
+    global st, img_name, se, mi, add, e_num, cs, txtcg
+
+    #内容语言切换初始化
+    txtcg  = True
 
     # 重置进度条
     cvs.delete('all')
@@ -82,8 +144,9 @@ def change():
     et.place(x=114514, y=114514)
     cng.place(x=1919180, y=1919180)
     # 标签代替输入框
-    txt = Label(rt, text='测试已经开始', font=('微软雅黑', 20)
-                ).grid(row=0, column=0, columnspan=4)
+    txt = Label(rt, font=('微软雅黑', 20))
+    txt.grid(row=0, column=0, columnspan=4)
+    lan_check(txt,'测试已经开始','Alredy Start') #语言检测
     # 检测输入内容
     if e_num == '':
         e_num = 215  # 默认值
@@ -105,8 +168,7 @@ def change():
             conti = 1
 
             # 切换按钮文字
-            bt.configure(text='点击')
-            bt.text = '点击'
+            lan_check(bt,'点击','Click!')
 
             # 进度条动效
             add += 215/e_num
@@ -126,20 +188,31 @@ def change():
                 cs = int((e_num/(ho * 360 + se * 60 + mi))*100) / 100
 
                 # 输出CPS
-                cps.configure(text='您的每秒点击鼠标次数:'+str(cs))
-                cps.text = '您的每秒点击鼠标次数:'+str(cs)
+                lan_check(cps,'您的每秒点击鼠标次数:'+str(cs),'Your cps:'+str(cs))
 
                 # 评价输出
-                if 0 <= cs and 4 >= cs:
-                    comment('树獭')
-                elif cs > 4 and cs <= 6:
-                    comment('鸵鸟')
-                elif cs > 6 and cs <= 10:
-                    comment('兔子')
-                elif cs > 10 and cs <= 12:
-                    comment('猎豹')
+                if en:
+                    if 0 <= cs and 4 >= cs:
+                        comment('TOO slow')
+                    elif cs > 4 and cs <= 6:
+                        comment('Slow')
+                    elif cs > 6 and cs <= 10:
+                        comment('Medium')
+                    elif cs > 10 and cs <= 12:
+                        comment('Fast')
+                    else:
+                        comment('VERY fast')
                 else:
-                    comment('鹰')
+                    if 0 <= cs and 4 >= cs:
+                        comment('树獭')
+                    elif cs > 4 and cs <= 6:
+                        comment('鸵鸟')
+                    elif cs > 6 and cs <= 10:
+                        comment('兔子')
+                    elif cs > 10 and cs <= 12:
+                        comment('猎豹')
+                    else:
+                        comment('鹰')
 
             # 读取图片
             img1 = Img.open(img_path + 'k (' + str(img_name) + ').png')
@@ -154,18 +227,23 @@ def change():
 
 
 # 变量初始赋值
+txtcg = False
 img_name = 0
 c_num = 0
 conti = 0
 st = True
 add = 0
+en = False
 
 # 按钮组件定义
 bt = Button(rt, font=('微软雅黑'), text='开始', command=change)
 bt.grid(row=2, column=0)  # 开始按钮
 
 cng = Button(rt, text='更改次数(若输入内容非纯数字或大于215或为1,则自动替换为215)',
-             font=('微软雅黑', 13), width=60, command=cag)
-cng.grid(row=0, column=0, columnspan=4)  # 更改次数按钮
+             font=('微软雅黑', 13), width=50, command=cag)
+cng.grid(row=0, column=0, columnspan=3)  # 更改次数按钮
+
+lan_cng = Button(rt, font=('微软雅黑',13),text=('English'),command=la_cng)
+lan_cng.grid(row=0,column=3)
 
 rt.mainloop()
