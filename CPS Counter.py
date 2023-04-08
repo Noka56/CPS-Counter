@@ -112,6 +112,7 @@ def comment(text):
     com.configure(text=text)
     com.text = text
 
+#定义lan_check函数,用以识别语种
 def lan_check(module,cn,eng):
     global en
 
@@ -146,7 +147,7 @@ def change():
     # 标签代替输入框
     txt = Label(rt, font=('微软雅黑', 20))
     txt.grid(row=0, column=0, columnspan=4)
-    lan_check(txt,'测试已经开始','Alredy Start') #语言检测
+    lan_check(txt,'测试已经开始','Already Start') #语言检测
     # 检测输入内容
     if e_num == '':
         e_num = 215  # 默认值
@@ -244,6 +245,6 @@ cng = Button(rt, text='更改次数(若输入内容非纯数字或大于215或�
 cng.grid(row=0, column=0, columnspan=3)  # 更改次数按钮
 
 lan_cng = Button(rt, font=('微软雅黑',13),text=('English'),command=la_cng)
-lan_cng.grid(row=0,column=3)
+lan_cng.grid(row=0,column=3) # 语言切换按钮 
 
 rt.mainloop()
