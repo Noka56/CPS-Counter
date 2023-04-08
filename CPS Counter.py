@@ -1,6 +1,6 @@
 ##########################################################################
-#                             CPS Counter
-#                                                 Made by Noka_official
+#                             CPS Counter                                #
+#                                                 Made by Noka_official  #
 ##########################################################################
 
 # 库调用
@@ -44,7 +44,7 @@ def la_cng():
     global en
 
     if en:
-        txtcn(cps,'您的每秒点击鼠标次数:')
+        txtcn(cps,'您的每秒点击鼠标次数:'+str(cs))
         txtcn(lan_cng,'English')
         if st:
             txtcn(com, '评价在测试完后显示')
@@ -67,7 +67,7 @@ def la_cng():
                 comment('鹰')
         en = False
     else:
-        txtcn(cps,'Your CPS:')
+        txtcn(cps,'Your CPS:'+str(cs))
         txtcn(lan_cng,'中文')
         if st:
             txtcn(com, 'Comment will be here')
@@ -235,6 +235,7 @@ conti = 0
 st = True
 add = 0
 en = False
+cs = 0
 
 # 按钮组件定义
 bt = Button(rt, font=('微软雅黑'), text='开始', command=change)
